@@ -1,0 +1,100 @@
+\documentclass[sigconf]{acmart}
+%%\documentclass[manuscript,screen,review]{acmart}
+
+\usepackage{tabularx}
+
+\setcopyright{acmlicensed}
+\copyrightyear{2023}
+\acmYear{2023}
+\acmDOI{XXXXXXX.XXXXXXX}
+
+\acmConference[CSCW]{The 27th ACM Conference on Computer-Supported Cooperative Work and Social Computing}{November 09--13,
+  2024}{San José, Costa Rica}
+
+\acmISBN{978-1-4503-XXXX-X/18/06}
+
+\usepackage{svg}
+
+\begin{document}
+
+\title{Universal Basic Philanthropy: Design and Analysis of a Grassroots Effort to Democratize Social Profit}
+
+\author{Thien-Nam Dinh}
+\email{thiennam.tnd@gmail.com}
+\affiliation{%
+  %% \institution{Token Ibis}
+  \city{Albuquerque}
+  \state{NM}
+  \country{USA}
+}
+
+\begin{abstract}
+  In democratic society, few efforts are more worthwhile than the design of effective mechanisms for funding public goods.
+  The subject of this study is one attempt to demonstrate such a mechanism: a real-world experiment to pioneer a concept called Universal Basic Philanthropy.
+  In this experiment, a local nonprofit in the city of Albuquerque distributed free money to individuals to reallocate to other local nonprofits of their choosing.
+  Over the course of approximately four years, the project facilitated \$145,641 over 13,812 donations from 702 people to 59 organizations.
+  In this study, I use publicly available transaction data from the Albuquerque pilot project to explore the following question: how we can better understand social demand for public goods?
+  Using a network approach, I characterize the organizations supported by participants in the project using three measures of graph centrality: intensity, popularity, and connectivity.
+  I use natural language processing to embed, cluster, and aggregate these centrality measures at the level of causes.
+  The paramount result is as follows: organizations in arts, culture, and education have a comparative advantage in the intensity of fundraising while organizations in civics, basic needs, and other causes have a comparative advantage in connectivity.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10003120.10003130.10011762</concept_id>
+       <concept_desc>Human-centered computing~Empirical studies in collaborative and social computing</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010405.10010455.10010461</concept_id>
+       <concept_desc>Applied computing~Sociology</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002951.10003227.10003233.10010519</concept_id>
+       <concept_desc>Information systems~Social networking sites</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010147.10010178.10010179.10003352</concept_id>
+       <concept_desc>Computing methodologies~Information extraction</concept_desc>
+       <concept_significance>100</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Human-centered computing~Empirical studies in collaborative and social computing}
+\ccsdesc[300]{Applied computing~Sociology}
+\ccsdesc[300]{Information systems~Social networking sites}
+\ccsdesc[100]{Computing methodologies~Information extraction}
+
+\keywords{philanthropy, network analysis, natural language processing}
+
+\received{23 May 2024}
+%% \received[revised]{12 March 2009}
+%% \received[accepted]{5 June 2009}
+
+\maketitle
+
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Design}
+\input{sections/design}
+
+\section{Analysis}
+\input{sections/analysis}
+
+\section{Discussion}
+\input{sections/discussion}
+
+\begin{acks}
+  I would like to thank and acknowledge the board members and volunteers of Token Ibis for their contributions to the project, all individuals and organizations in the Albuquerque pilot for contributing their philanthropic preferences to the community, and Reuben (Jack) Thomas for advice and feedback on the paper.
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references.bib}
+
+\end{document}
+\endinput

@@ -1,0 +1,35 @@
+* todos
+- create basic distribution graphs
+  - automate on the server
+- do the NLP thing
+- download 990 forms
+* Angles
+- 990 budgets
+- activity vectors
+- nlp clusters
+- total donations
+- bridging edges
+- user donation sets
+* Research question
+- how do giving patterns elucidate the topology of social impact ecosystems?
+* Thoughts:
+centrality in projection graph?
+* Intermediate artifacts
+- individuals
+  - diversity indices for individuals
+  - activity: actions per donation
+- nonprofits
+  - bert + agglomeration nlp clusters using ward's method
+  - eigenvalue centralities
+  - activity: activity percentage (average)
+* Goal:
+- calculate normalized cluster weights
+* First-Order
+- dimensions
+- proportion relative to total
+* Second-Order
+** Heterogeneity 
+- total amounts... pie chart?
+** Connectivity
+- eigenvector... pie chart?
+* 

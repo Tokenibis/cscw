@@ -1,0 +1,131 @@
+In this section, I describe the methodology and results of the analysis that I performed on the data.
+The overall approach is as follows.
+First, I define three measures of node centrality designed to highlight specific interpretations of importance.
+Next, I apply them to each organization on the platform.
+Finally, I use natural language processing techniques to infer categories of causes across the ecosystem and apply the centrality measures at this higher level of abstraction.
+The three centrality measures are:
+
+\begin{itemize}
+  \item \textbf{Intensity}: Intensity measures the total amount of funds that an organization raises.
+    An organization's raw intensity score is the sum of the donations that it receives over its lifetime.
+
+  \item \textbf{Popularity}: Popularity measures the funds that an organization raises while accounting for the diversity of its sources.
+    An organization's raw popularity score is the sum of funds that it would hypothetically receive under a quadratic voting paradigm~\cite{lalley2018quadratic}.
+    Although the choice of a quadratic adjustment is somewhat arbitrary, this distribution scheme is arguably the simplest well-known paradigm that captures both the magnitude and diversity of support for public goods.
+
+  \item \textbf{Connectivity}: Connectivity measures the common support base that organizations share with other highly connected organizations.
+    To calculate connectivity, we first need to define weighted edges between organizations.
+    The procedure I use is as follows: for all pairs of organizations, find all users who have donated to both organizations.
+    Represent each common user as a ``tie'' with a weight that corresponds to the geometric mean of the total amount of money the user sent to each of the two organizations.
+    Finally, define the weighted edge between any two organizations as the sum of its ties.
+    An organization's raw connectivity score is the eigenvector centrality calculated over this graph of weighted edges~\cite{hagberg2008exploring}.
+
+\end{itemize}
+
+Intuitively, these three measures correspond to objectives that different organizations might prioritize.
+Intensity measures the most obvious goal: to raise as much money as possible.
+However, for many organizations, the gross funding amount might be relatively less important than the number of individuals it can recruit to its cause, i.e., its popularity.  
+Finally, other organizations might favor the potential for collaboration and mobilization as measured by connectivity.
+These organizations would benefit from sharing many supporters with other organizations that, in turn, share supporters with still others.
+All three of these measures are mutually monotonically increasing; a single marginal donation from any individual will improve the target organization's centrality in all three measures.
+However, the magnitude of the increase depends on the centrality measure.
+Intensity is indifferent to the identity of the donor.
+Popularity considers how much the donor has previously donated to the same organization.
+Connectivity considers the role of the donor in the context of the global graph structure.
+In Figure~\ref{fig:graph}, these measures loosely correlate to the visual size, edge set, and geometric position of nodes.
+
+Table~\ref{tab:org} contains a sorted list of high-centrality organizations and their relative scores.
+The top three organizations in terms of intensity include an adult music choir (New Mexico Peace Choir), a professional arts support organization (Avokado Artists), and a public children's radio show (The Children's Hour).
+One unifying characteristic between these organizations is that they all have dedicated members who meet regularly---performers in the first two organizations and parents of performers in the latter. 
+This tight-knit, peer-based setting appears to be conducive to maintaining a group donation routine.
+Meanwhile, only two organizations score higher on popularity relative to other organizations\footnote{The second organization, a youth choir (Albuquerque Girl Choir), is likely incorrectly classified.
+The illusion of popularity is because it is a more recent addition to the nonprofit set. In the long term, it will likely become a high-intensity organization with a closed, dedicated support base.}.
+The first, a youth mentoring program (Together for Brothers) is comprised of both regular staff and a dynamic flux of mentees.
+Another organization, a crisis call center (Agora Crisis Center) has a similar model where dedicated staff members oversee a larger, dynamic population of volunteers.
+Although it scores highest on intensity, the relative drop-off in popularity is not as dramatic as the other top-four organizations.
+This two-tiered dynamic model appears conducive to cultivating diverse support bases.
+Finally, the remaining organizations are characterized by their high connectivity scores.
+In general, these organizations---many of which work in basic needs and other forms of care---have dedicated staff and more dispersed volunteer and client bases.
+Consequently, many of their donations appear to come from reciprocity networks of staff members and one-off donations from regular supporters of other organizations.
+
+\begin{table}[H]
+  \caption{Centrality measures applied to organizations. The list shows the top 16 organizations sorted according to intensity. Bold indicates each organization's strongest centrality measure. Scores are normalized so that all organizational centralities sum to 100.}
+  \label{tab:org}
+  \begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}rrr}
+    \toprule
+    Organization & Intensity & Popularity & Connectivity \\
+    \midrule
+    New Mexico Peace Choir & \textbf{12.78} & 8.03 & 4.65 \\
+    Avokado Artists & \textbf{11.42} & 4.42 & 2.85 \\
+    The Children's Hour & \textbf{9.45} & 4.11 & 4.84 \\
+    Agora Crisis Center & \textbf{8.59} & 7.31 & 5.32 \\
+    The Grief Center & \textbf{4.34} & 3.79 & 3.26 \\
+    ReadWest Adult Literacy & \textbf{2.74} & 2.11 & 1.69 \\
+    New Day & \textbf{2.50} & 2.21 & 2.04 \\
+    Food is Free Albuquerque & 2.48 & 2.71 & \textbf{3.35} \\
+    Transgender Resource & 2.33 & 3.08 & \textbf{3.34} \\
+    Together for Brothers & 2.13 & \textbf{2.79} & 2.27 \\
+    NM Kids Matter & 2.03 & 1.75 & \textbf{2.18} \\
+    Pegasus & \textbf{2.00} & 1.88 & 1.75 \\
+    Mandy's Farm & 1.93 & 2.39 & \textbf{3.23} \\
+    Albuquerque Girl Choir & 1.85 & \textbf{1.90} & 0.34 \\
+    Somos Unidos & \textbf{1.78} & 1.30 & 0.65 \\
+    Fathers Building Futures & 1.72 & 1.76 & \textbf{2.10} \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+We now turn to the task of generalizing the measures to the level of causes.
+My strategy is to use each organization's description to infer the proximity of their mission space to a common set of automatically discovered causes.
+By combining cause proximities with centrality scores and aggregating across all organizations, I obtain aggregate centrality measures for reach cause.
+The detailed procedure is as follows:
+
+\begin{enumerate}
+
+ \item \textbf{Training Set Creation}: I scrape and process a public repository of local New Mexico nonprofits to obtain 2650 nonprofit descriptions.~\footnote{\url{https://www.groundworksnm.org/nonprofit-directory}} For each description, I use Spacy's \texttt{en\_core\_web\_lg} language model to split the description into sentences and filter out descriptions that are less than four sentences long, leaving 700 remaining descriptions~\cite{honnibal2020spacy}.
+   Finally, I use a sentence embedding library based on the BERT language model to obtain a vector representation for each description~\cite{reimers-2019-sentence-bert}.
+   I define each description vector as the mean of its constituent sentence vectors.
+
+  \item \textbf{Category Definitions}: I use Scikit Learn's K-means clustering algorithm with a deterministic seed to partition the training set vectors into eight disjoint clusters~\cite{pedregosa2011scikit}.
+A single pass produce outliers in the form of unusable small clusters.
+To remove these outliers, I continuously re-run the algorithm and remove all clusters that contain less than $\frac{1}{32}$ of the total remaining descriptions.
+This process results in 679 remaining members of the training set where the smallest of the eight clusters has 52 description vectors.
+Next, for each cluster, I concatenate the text description of each of its members and use Spacy's \texttt{en\_core\_web\_lg} language model to lemmatize and prune stop words, yielding a bag-of-words representation of each cluster.
+I then use Scikit Learn's TFIDF algorithm to obtain the most representative root words for each cluster.
+Finally, I manually examine the collection of representative words---and perform a sanity check of constituent nonprofit websites---to produce a high-level name for each cluster.
+
+  \item \textbf{Target Set Evaluation}:
+    I obtain a vector representation of each organizational description in the Albuquerque pilot using the same procedure I use to vectorize the descriptions in the training set.
+    Next, for each vector in the target set, I calculate its cosine similarity to the centroid of each of the eight clusters.
+    I use the normalized version of these similarity calculations to infer the distribution of causes that make up each organization's mission.
+    This distribution determines the proportion of the centrality score that I attribute to each cause.
+
+\end{enumerate}
+
+Table~\ref{tab:cause} displays the final centrality scores attributable to each of the eight defined causes.
+From this, we can observe two trends that generalize the organization-level centrality measures.
+The causes that are mostly likely to feature groups of regular peer members---education, arts, and culture---are comparatively stronger in the intensity of their fundraising.
+Meanwhile, all others are comparatively more connected, likely owing to their dispersed support base and professional staffing networks.
+Given the high-connected graph used to compute the eigenvector scores, the differences are significant.
+No cause has a comparatively high level of popularity relative to either of the other two centrality scores.
+Evidently, while individual organizations might be relatively more popular than they are intense or connected, this distinction disappears at the cause level.
+
+\begin{table}[H]
+  \caption{Centrality measures applied to causes. The list shows all eight causes sorted according to intensity. Bold indicates each cause's strongest centrality measure. Scores are normalized so that all cause centralities sum to 100.}
+  \label{tab:cause}
+  \begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}rrr}
+    \toprule
+    Cause & Intensity & Popularity & Connectivity \\
+    \midrule
+    Civics & 13.48 & 13.62 & \textbf{13.66} \\
+    Basic Needs & 13.12 & 13.38 & \textbf{13.49} \\
+    Youth \& Families & 12.75 & 13.08 & \textbf{13.24} \\
+    Animals & 12.73 & 13.21 & \textbf{13.44} \\
+    Education & \textbf{12.42} & 12.34 & 12.31 \\
+    Culture & \textbf{12.34} & 11.92 & 11.74 \\
+    Arts & \textbf{11.83} & 10.96 & 10.49 \\
+    Nature & 11.33 & 11.50 & \textbf{11.62} \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
