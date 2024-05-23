@@ -7,8 +7,6 @@ import pickle
 import numpy as np
 import networkx as nx
 
-from IPython import embed
-
 from tqdm import tqdm
 from numpy.linalg import norm
 from itertools import combinations_with_replacement as comb
@@ -201,8 +199,6 @@ def models(org_shares, target, training):
         for v in clusters.values()).toarray()
     print(matrix.shape)
     features = summarizer.get_feature_names_out()
-
-    # embed()
 
     summaries = dict(
         zip(

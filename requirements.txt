@@ -1,0 +1,8 @@
+numpy==1.22.4
+spacy==3.7.4
+networkx==2.6.3
+tqdm==4.66.2
+markdown-it-py==3.0.0
+mdit_plain==1.0.1
+scikit-learn==1.4.2
+sentence_transformers==2.7.0
